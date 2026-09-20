@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Flores Amarillas</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for romantic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1025 0%, #36152e 50%, #4a2511 100%);
+            color: white;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Romantic Title Font */
+        .font-romantic {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Glassmorphism Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        /* Button Glow */
+        .btn-glow {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-glow:active {
+            transform: scale(0.95);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+        }
+
+        /* Falling Petals Animation */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg) translateX(30px);
+                opacity: 0;
+            }
+        }
+
+        /* CSS shape for yellow petals */
+        .petal {
+            position: absolute;
+            top: -10vh;
+            background: linear-gradient(135deg, #FFEA00, #FFB300);
+            border-radius: 15px 0 15px 0;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Animations for revealing the surprise */
+        .fade-in {
+            animation: fadeInScale 1s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.9); display: none; }
+        }
+
+        /* Glowing text for the final message */
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 223, 0, 0.6), 0 0 30px rgba(255, 223, 0, 0.3);
+        }
+
+        /* Bouquet animation */
+        .bouquet-anim {
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.5));
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(-5deg); }
+        }
+    </style>
+</head>
+<body class="relative flex items-center justify-center">
+
+    <!-- Container for falling petals -->
+    <div id="petals-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- Main Interactive Card -->
+    <div class="glass-card rounded-3xl p-8 m-4 max-w-sm w-full text-center relative z-20 flex flex-col items-center justify-center min-h-[400px]">
+        
+        <!-- Top decorative element -->
+        <div class="text-yellow-400 text-2xl mb-2 opacity-80">✨</div>
+
+        <!-- Initial Screen -->
+        <div id="initial-screen" class="w-full transition-all duration-500">
+            <h1 class="font-romantic text-5xl md:text-6xl text-yellow-300 mb-6 text-glow leading-tight">
+                Feliz 21 de <br> Septiembre
+            </h1>
+            
+            <p class="text-gray-200 mb-10 text-sm md:text-base px-2">
+                Creias peque que no ibas a tener nada? Simple pero espero que te guste...
+            </p>
+
+            <button id="surprise-btn" class="btn-glow bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-900 font-bold py-4 px-8 rounded-full text-lg w-full shadow-lg outline-none tap-highlight-transparent">
+                Toca aquí para tu sorpresa
+            </button>
+        </div>
+
+        <!-- Surprise Screen (Hidden initially) -->
+        <div id="surprise-screen" class="w-full hidden opacity-0 absolute inset-0 flex-col items-center justify-center p-6 h-full">
+            <div class="text-7xl md:text-8xl mb-6 bouquet-anim">
+                💐🌻🤍
+            </div>
+            
+            <h2 class="font-romantic text-3xl md:text-4xl text-yellow-300 mb-4 text-glow leading-snug">
+                Acá tienes tu ramo de flores amarillas, saltamontes !!
+            </h2>
+            
+            <p class="text-white text-base font-light italic opacity-90 px-2">
+                "Te Amo Preciosa"
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const petalsContainer = document.getElementById('petals-container');
+            const btn = document.getElementById('surprise-btn');
+            const initialScreen = document.getElementById('initial-screen');
+            const surpriseScreen = document.getElementById('surprise-screen');
+            let petalInterval;
+
+            // Function to create a single falling petal
+            function createPetal(isBurst = false) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Randomize size
+                const size = Math.random() * 15 + 10; // Between 10px and 25px
+                petal.style.width = `${size * 0.6}px`;
+                petal.style.height = `${size}px`;
+                
+                // Randomize starting position (horizontal)
+                petal.style.left = `${Math.random() * 100}vw`;
+                
+                // Randomize animation duration and delay
+                const duration = Math.random() * 4 + 4; // 4 to 8 seconds
+                petal.style.animationDuration = `${duration}s`;
+                
+                // Randomize initial rotation and sway
+                const rot = Math.random() * 360;
+                
+                // Set animation name
+                petal.style.animationName = 'fall';
+                petal.style.animationTimingFunction = 'linear';
+                
+                if (isBurst) {
+                    petal.style.animationDuration = `${duration * 0.6}s`; // Fall faster in burst
+                }
+
+                petalsContainer.appendChild(petal);
+
+                // Remove petal after animation completes to clean up DOM
+                setTimeout(() => {
+                    petal.remove();
+                }, duration * 1000);
+            }
+
+            // Start ambient petal fall
+            function startPetals(intervalTime) {
+                if (petalInterval) clearInterval(petalInterval);
+                petalInterval = setInterval(() => createPetal(false), intervalTime);
+            }
+
+            // Create initial batch of petals
+            for(let i=0; i<15; i++) {
+                setTimeout(() => createPetal(false), Math.random() * 3000);
+            }
+            
+            // Continuous slow petal fall
+            startPetals(400);
+
+            // Handle button click for the surprise
+            btn.addEventListener('click', () => {
+                // 1. Hide initial screen
+                initialScreen.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    initialScreen.style.display = 'none';
+                    
+                    // 2. Show surprise screen
+                    surpriseScreen.style.display = 'flex';
+                    surpriseScreen.classList.remove('hidden');
+                    surpriseScreen.classList.add('fade-in');
+                    
+                    // 3. Create a burst of flowers
+                    createFlowerBurst();
+                    
+                    // 4. Increase ambient flower fall rate slightly
+                    startPetals(150);
+                }, 500); // Wait for fade-out to finish
+            });
+
+            // Function to create an immediate burst of many petals
+            function createFlowerBurst() {
+                for(let i = 0; i < 40; i++) {
+                    setTimeout(() => {
+                        createPetal(true);
+                    }, Math.random() * 1000);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
